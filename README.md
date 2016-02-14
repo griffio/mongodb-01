@@ -12,7 +12,7 @@ compile(“org.mongodb:mongo-java-driver:3.2.1”)
 ```
 The Java SSL platform requires all certificates to be trusted are install into a Key Store.
 
->Support-tip: You can create a Key Store using the JDK’s “keytool” utility. Requires you to enter a password at the end
+>Tip: You can create a Key Store using the JDK’s “keytool” utility. Requires you to enter a password at the end
 
 ```
 keytool -importcert -trustcacerts -file <cert filename>.crt -keystore <output filename>.jks
@@ -29,7 +29,7 @@ MongoClientURI connectionString = new MongoClientURI(uri);
 MongoClient mongoClient = new MongoClient(connectionString);
 MongoDatabase database = mongoClient.getDatabase(“foxtrot”);
 ```
->Support-tip: If SSL works when using the hostname but connecting with the IP address fails with a validation error. Check the hostname matches the certificate’s CN (Common Name) field.
+>Tip: If SSL works when using the hostname but connecting with the IP address fails with a validation error. Check the hostname matches the certificate’s CN (Common Name) field.
 
 To allow connecting with an ip address, that would fail hostname validation, use the MongoClientOptions.Builder instead:-
 ```
