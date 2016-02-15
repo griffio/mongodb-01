@@ -3,7 +3,7 @@
 Only get a MongoDB distribution if it has SSL baked in. 
 https://www.mongodb.org/downloads?jmp=docs#production
 Windows, Linux, Mac OS X or Solaris. Currently you will see the OS X and Solaris packages aren’t linked with SSL libraries.
->tip: [build MongoDB from Source with TLS/SSL Support] (https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/)
+>Tip: [build MongoDB from Source with TLS/SSL Support] (https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/)
 
 ### Mongodb 3.x Driver connection with JDK 7 or 8
 
