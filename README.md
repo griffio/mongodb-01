@@ -13,7 +13,7 @@ https://mongodb.github.io/mongo-java-driver/3.0/driver/reference/connecting/conn
 
 The Gradle dependency used with this example will be downloaded from jcenter.
 
-```
+``` gradle
 repositories {
   jcenter()
 }
@@ -38,7 +38,7 @@ Your application needs System properties to provide the Java platform SSL librar
 
 The connection string used with the Java driver:-
 
-```
+``` java
 String uri = “mongoldb://<hostname>:27017?ssl=true”;
 MongoClientURI connectionString = new MongoClientURI(uri);
 MongoClient mongoClient = new MongoClient(connectionString);
@@ -49,7 +49,7 @@ MongoDatabase database = mongoClient.getDatabase(“foxtrot”);
 
 To allow connecting with an IP address, as this would fail hostname validation, use the MongoClientOptions.Builder instead:-
 
-```
+``` java
 String uri = “mongodb://<ip address>:27017/”;
 MongoClientURI connectionString;
 MongoClientOptions.Builder builder;
