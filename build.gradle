@@ -1,9 +1,11 @@
-apply plugin: 'java'
+plugins {
+  id "java"
+}
 
 repositories {
   jcenter()
 }
 
 dependencies {
-  compile("org.mongodb:mongo-java-driver:3.2.1")
+  compile("org.mongodb:mongo-java-driver:3.2.+")
 }
