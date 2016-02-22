@@ -20,7 +20,13 @@ compile(“org.mongodb:mongo-java-driver:3.2.1”)
 
 The Java SSL/TLS platform requires all certificates to be trusted and be installed into a Key Store.
 
-We should not bypass certificate checking that the "-sslAllowInvalidCertificates" flag would allow on the command line client.
+keytool can be used to import the Public Key certificate provided by the server deployment.
+
+```
+keytool -importcert -trustcacerts -file server-cert.crt -keystore KeyStore.jks
+```
+
+We should not bypass certificate checking like the "-sslAllowInvalidCertificates" flag would allow on the command line client.
 
 >Tip: You can create a Key Store using the JDK’s “keytool” utility. Requires you to enter a password at the end.
 
