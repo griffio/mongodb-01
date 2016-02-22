@@ -4,18 +4,22 @@ You need to install MongoDB from a distribution with SSL included. You can check
 This shows Windows, Linux, Mac OS X or Solaris. Currently you will see the OS X and Solaris packages are not linked with SSL libraries.
 For example, the official documentation to build the OS X distribution is here: https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/
 
-### Mongodb 3.x Driver connection with JDK 7 or 8
+### Mongodb 3.2.x Driver connection with JDK 7 or 8
 
-For reference, these are all the official connection settings: https://mongodb.github.io/mongo-java-driver/3.0/driver/reference/connecting/connection-settings/
-
-For our project, we are assuming a Gradle build file, the MongoDB Java driver dependency used with this example will be downloaded from jcenter:-
+For our Java project, we are showing the most basic Gradle build, the latest 3.2 MongoDB Java dependency used with this example will be downloaded from jcenter:-
 
 ``` gradle
+plugins {
+  id "java"
+}
+
 repositories {
   jcenter()
 }
 
-compile(“org.mongodb:mongo-java-driver:3.2.1”)
+dependencies {
+  compile("org.mongodb:mongo-java-driver:3.2.+")
+}
 ```
 
 The Java SSL/TLS platform requires all certificates to be trusted and be installed into a Key Store.
@@ -40,6 +44,8 @@ Your application uses System properties to provide the Java platform SSL library
 -Djavax.net.ssl.trustStore=<path to KeyStore file>
 -Djavax.net.ssl.trustStorePassword=<password>
 ```
+
+For reference, these are all the official client connection settings: https://docs.mongodb.org/manual/reference/connection-string/
 
 The connection string used with the Java driver:-
 
