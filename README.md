@@ -1,14 +1,14 @@
-# MongoDB SSL/TLS
+# Connecting to MongoDB with SSL/TLS
 
-Only install a MongoDB distribution with SSL included. You can check here for the install packages: https://www.mongodb.org/downloads?jmp=docs#production
+You need to install MongoDB from a distribution with SSL included. You can check here for the install packages: https://www.mongodb.org/downloads?jmp=docs#production
 This shows Windows, Linux, Mac OS X or Solaris. Currently you will see the OS X and Solaris packages are not linked with SSL libraries.
 For example, the official documentation to build the OS X distribution is here: https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/
 
 ### Mongodb 3.x Driver connection with JDK 7 or 8
 
-These are all the official connection settings for your reference: https://mongodb.github.io/mongo-java-driver/3.0/driver/reference/connecting/connection-settings/
+For reference, these are all the official connection settings: https://mongodb.github.io/mongo-java-driver/3.0/driver/reference/connecting/connection-settings/
 
-Using a Gradle build file, the driver dependency used with this example will be downloaded from jcenter.
+For our project, we are assuming a Gradle build file, the MongoDB Java driver dependency used with this example will be downloaded from jcenter:-
 
 ``` gradle
 repositories {
@@ -20,13 +20,15 @@ compile(“org.mongodb:mongo-java-driver:3.2.1”)
 
 The Java SSL/TLS platform requires all certificates to be trusted and be installed into a Key Store.
 
+We should not bypass certificate checking that the "-sslAllowInvalidCertificates" flag would allow on the command line client.
+
 >Tip: You can create a Key Store using the JDK’s “keytool” utility. Requires you to enter a password at the end.
 
 ```
 keytool -importcert -trustcacerts -file <cert filename>.crt -keystore <output filename>.jks
 ```
 
-Your application needs System properties to provide the Java platform SSL library with the location and password of the Key Store file:-
+Your application uses System properties to provide the Java platform SSL library with the location and password of the Key Store file:-
 
 ```
 -Djavax.net.ssl.trustStore=<path to KeyStore file>
@@ -55,6 +57,7 @@ To allow connecting with an IP address, as this would fail hostname validation, 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
+import static com.mongodb.MongoClientOptions.builder;
 
 String uri = “mongodb://<ip address>:27017/”;
 MongoClientURI connectionString;
@@ -63,3 +66,36 @@ builder = MongoClientOptions.builder().sslEnabled(true).sslInvalidHostNameAllowe
 connectionString = new MongoClientURI(uri, builder);
 MongoClient mongoClient = new MongoClient(connectionString);
 ```
+---
+
+#### Connection with user and password
+
+Firstly, make sure you have the password from the server deployment and a user.
+
+We use MongoCredential and have to create a ServerAddress list to make the MongoClient API call.
+
+``` java
+
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoClientURI;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
+import static com.mongodb.MongoClientOptions.builder;
+
+char[] pwd = "mypasswrd!".toCharArray();
+
+MongoCredential credential = MongoCredential.createCredential("myadmin", "admin", pwd); // user "myadmin" on admin database
+
+List<MongoCredential> credentials = Collections.singletonList();
+
+List<ServerAddress> hosts = Arrays.asList(
+    new ServerAddress("mongodb01.host.dblayer.com:10054"),
+    new ServerAddress("mongodb02.host.1.dblayer.com:10071"));
+
+MongoClient mongoClient = new MongoClient(hosts, credentials, options);
+MongoDatabase foxtrot = mongoClient.getDatabase("foxtrot");
+MongoIterable<String> collectionNames = foxtrot.listCollectionNames(); // works when authenticated
+```
+
+> Tip: If things are not authenticating you will see: "not authorized on foxtrot to execute command"
