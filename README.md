@@ -69,7 +69,7 @@ MongoDatabase database = mongoClient.getDatabase(“foxtrot”);
 
 >Tip: If SSL works when using the hostname but connecting with the IP address fails with a validation error, check the hostname matches the certificate’s CN (Common Name) field
 
-To allow connecting with an IP address, as this would fail hostname validation, use the MongoClientOptions.Builder instead:-
+To allow connecting with an IP address, as this would fail hostname validation, use the MongoClientOptions.Builder instead to allow invalid host names:-
 
 ``` java
 
@@ -80,8 +80,8 @@ import static com.mongodb.MongoClientOptions.builder;
 
 String uri = “mongodb://<ip address>:27017/”;
 MongoClientURI connectionString;
-MongoClientOptions.Builder builder;
-builder = MongoClientOptions.builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
+MongoClientOptions.Builder optionsBuilder;
+optionsBuilder = MongoClientOptions.builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
 connectionString = new MongoClientURI(uri, builder);
 MongoClient mongoClient = new MongoClient(connectionString);
 ```
@@ -89,9 +89,9 @@ MongoClient mongoClient = new MongoClient(connectionString);
 
 #### Connection with user and password
 
-Firstly, make sure you have the password from the server deployment and a user
+Find a username and password from your MongoDB server deployment or create a new one
 
-We use MongoCredential and have to create a ServerAddress list to make the MongoClient API call
+We need to use a MongoCredential instance and populate a ServerAddress list to make the MongoClient API call work
 
 ``` java
 
@@ -112,9 +112,10 @@ List<ServerAddress> hosts = Arrays.asList(
     new ServerAddress("mongodb01.host.dblayer.com:10054"),
     new ServerAddress("mongodb02.host.1.dblayer.com:10071"));
 
-MongoClient mongoClient = new MongoClient(hosts, credentials, options);
+MongoClientOptions.Builder options = builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
+MongoClient mongoClient = new MongoClient(hosts, credentials, options.build);
 MongoDatabase foxtrot = mongoClient.getDatabase("foxtrot");
-MongoIterable<String> collectionNames = foxtrot.listCollectionNames(); // works when authenticated
+MongoIterable<String> collectionNames = foxtrot.listCollectionNames();
 ```
 
 > Tip: If things are not authenticating you will see: "not authorized on foxtrot to execute command"
