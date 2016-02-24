@@ -122,7 +122,9 @@ MongoIterable<String> collectionNames = foxtrot.listCollectionNames();
 
 ### X509 Client Authentication
 
-Some servers only supply their own CA Public Key certificates, to support this option, a Certificate Authority must be able to issue the certificates for both the client and the server
+For this to work, the infrastructure where your MongoDB is deployed must be capable of generating valid certificates signed by a single Certificate Authority
+
+This alternative to authenticating with your username and password allows the client to present their own certificate for identification instead
 
 > Refer to: https://docs.mongodb.org/manual/tutorial/configure-x509-client-authentication/#prerequisites
 
