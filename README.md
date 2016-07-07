@@ -113,7 +113,7 @@ List<ServerAddress> hosts = Arrays.asList(
     new ServerAddress("mongodb02.host.1.dblayer.com:10071"));
 
 MongoClientOptions.Builder options = builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
-MongoClient mongoClient = new MongoClient(hosts, credentials, options.build);
+MongoClient mongoClient = new MongoClient(hosts, credentials, options.build());
 MongoDatabase foxtrot = mongoClient.getDatabase("foxtrot");
 MongoIterable<String> collectionNames = foxtrot.listCollectionNames();
 ```
