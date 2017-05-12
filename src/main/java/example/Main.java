@@ -22,7 +22,8 @@ public class Main {
     MongoClientOptions.Builder options = builder().sslEnabled(true).sslInvalidHostNameAllowed(true);
     String uri = "mongodb://127.0.0.1:27017/";
     MongoClientURI connectionString = new MongoClientURI(uri, options);
-    MongoClient mongoClient = new MongoClient(connectionString);
+
+    MongoClient mongoClient = new MongoClient(connectionString); // simple connection
 
     // with username and password
 
